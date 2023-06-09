@@ -34,7 +34,7 @@ async function run() {
 
      //user related Api
      app.get('/users', async(req, res)=>{
-      const result = await userCollection.find().toArray;
+      const result = await userCollection.find().toArray();
       res.send(result);
 
      })
