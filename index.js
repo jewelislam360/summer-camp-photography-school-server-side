@@ -29,13 +29,26 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
-    //user related Api
+   
     const userCollection = client.db("photographyDb").collection("users");
+
+     //user related Api
+     app.get('/users', async(req, res)=>{
+      const result = await userCollection.find().toArray;
+      res.send(result);
+
+     })
 
     app.post('/users', async(req, res)=>{
         const user = req.body;
+        const query = {email: user.email}
+        const existingUser = await userCollection.findOne(query);
+        console.log(existingUser);
+        if(existingUser){
+          return res.send({message: 'user already exists'})
+        }
         const result = await userCollection.insertOne(user);
-        res.sand(result);
+        res.send(result);
 
     })
 
