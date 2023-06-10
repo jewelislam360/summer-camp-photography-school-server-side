@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 
 require('dotenv').config();
 
@@ -31,6 +32,13 @@ async function run() {
 
    
     const userCollection = client.db("photographyDb").collection("users");
+
+
+    app.post('/jwt',(req, res)=>{
+      const user =req.body;
+      const token =  jwt.sign(user, env.process.ACCESS_TOKEN_SECRET, {expireIn: '1h'})
+      res.send(token);
+    })
 
      //user related Api
      app.get('/users', async(req, res)=>{
