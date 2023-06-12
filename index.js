@@ -49,6 +49,7 @@ async function run() {
 
    
     const userCollection = client.db("photographyDb").collection("users");
+    const addclassCollection = client.db("photographyDb").collection("addclass");
 
 
     app.post('/jwt', (req, res)=>{
@@ -107,6 +108,7 @@ async function run() {
     })
 
     app.get('/users/instructor/:email', async (req, res) => {
+      console.log("hello");
       const email = req.params.email;
 
       // if (req.decoded.email !== email) {
@@ -139,6 +141,15 @@ async function run() {
       const result = await userCollection.deleteOne(query);
       console.log(result);
       res.send(result);
+    })
+
+    //class related api
+    app.post('/addclass', async(req,res)=>{
+      const newClass=req.body;
+      const result=await addclassCollection.insertOne(newClass);
+      res.send(result);
+      
+
     })
 
 
