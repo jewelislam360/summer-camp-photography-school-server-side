@@ -152,6 +152,55 @@ async function run() {
 
     })
 
+    app.get('/allclass', async (req, res) => {
+      const result = await addclassCollection.find().toArray();
+      res.send(result);
+    })
+
+    app.delete('/allclass/:id', async(req, res)=>{
+      const id = req.params.id;
+      const query={_id: new ObjectId(id)};
+      const result = await addclassCollection.deleteOne(query);
+      console.log(result);
+      res.send(result);
+    })
+
+    app.patch('/allclass/:id', async(req,res)=>{
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)};
+      const updateDoc = {
+        $set: {
+          status: 'approve'
+        },
+      };
+      const result = await addclassCollection.updateOne(filter, updateDoc);
+      res.send(result);
+
+
+    })
+    app.patch('/allclass/status/:id', async(req,res)=>{
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)};
+      const updateDoc = {
+        $set: {
+          status: 'pending'
+        },
+      };
+      const result = await addclassCollection.updateOne(filter, updateDoc);
+      res.send(result);
+
+
+    })
+
+    app.get('/allclass/:status', async (req, res) => {
+      const status = req.params.status;
+      const query={status: 'approve'};
+      const result = await addclassCollection.find(query ).toArray();
+      
+      res.send(result);
+    })
+
+
 
 
 
