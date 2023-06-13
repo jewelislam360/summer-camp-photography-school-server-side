@@ -222,6 +222,12 @@ async function run() {
       const result = await selectedClassCollection.find(query).toArray();
       res.send(result);
     })
+    app.get('/myenrollclass/:email', async(req, res)=>{
+      const email = req.params.email;
+      const query={email: email};
+      const result = await paymentCollection.find(query).toArray();
+      res.send(result);
+    })
 
     app.get('/payment/:id', async(req, res)=>{
       const id= req.params.id;
