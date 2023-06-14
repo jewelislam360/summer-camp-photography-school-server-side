@@ -236,6 +236,7 @@ async function run() {
     app.get('/selectedclass/:email', async(req, res)=>{
       const email = req.params.email;
       console.log(email);
+      console.log(email);
       const query={email: email};
       const result = await selectedClassCollection.find(query).toArray();
       res.send(result);
