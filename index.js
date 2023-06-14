@@ -154,6 +154,14 @@ async function run() {
       
 
     })
+    app.get('/myaddclass/:email', async(req,res)=>{
+      const email = req.params.email;
+      const query={instructorEmail: email};
+      const result = await addclassCollection.find(query).toArray();
+      res.send(result);
+      
+
+    })
 
     app.get('/allclass', async (req, res) => {
       const result = await addclassCollection.find().toArray();
@@ -216,6 +224,15 @@ async function run() {
       res.send(result);
 
     })
+
+      app.get('/selectedclass/:id', async(req, res)=>{
+        const id = req.params.email;
+        const query={_id: id};
+        const result = await selectedClassCollection.find(query).toArray();
+        res.send(result);
+    })
+
+
     app.get('/selectedclass/:email', async(req, res)=>{
       const email = req.params.email;
       const query={email: email};
@@ -261,11 +278,11 @@ async function run() {
       const filterClass = await addclassCollection.findOne(filter);
       if(filterClass){
         const sitUpdate= filterClass.availableSeats-1 ;
-        // const enrolledStudents = filterClass.enrolledStudent+1 ;
+        const enrolledStudents = filterClass.enrolledStudent+1 ;
         const updateDoc ={
           $set:{
             availableSeats: sitUpdate,
-            // enrolledStudent: enrolledStudents,
+            enrolledStudent: enrolledStudents,
 
           }
         }
