@@ -1,11 +1,16 @@
 const express = require('express');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+require('dotenv').config();
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
 
-const app=express();
+
+
+
+
 const stripe = require('stripe')(process.env.PAYMENT_SECRET_KEY)
 const port = process.env.PORT || 5000;
+const app=express();
 
 // middleware
 app.use(cors());
@@ -30,7 +35,6 @@ const verifyJWT = (req, res, next) => {
 
 
 
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.nn2sj3o.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -45,7 +49,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
    
     const userCollection = client.db("photographyDb").collection("users");
@@ -225,11 +229,12 @@ async function run() {
 
     })
 
-      app.delete('/selectedclass/:id', async(req, res)=>{
-        const id = req.params.email;
-        const query={_id: id};
-        const result = await selectedClassCollection.find(query).toArray();
-        res.send(result);
+    app.delete('/selectedclass/:id', async(req, res)=>{
+      const id = req.params.id;
+      const query={_id: new ObjectId(id)};
+      const result = await selectedClassCollection.deleteOne(query);
+      console.log(result);
+      res.send(result);
     })
 
 
@@ -307,7 +312,7 @@ async function run() {
 
 
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
